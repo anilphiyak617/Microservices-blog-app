@@ -7,7 +7,7 @@ app.use(express.json());
 
 // cors middleware 
 app.use(cors({origin:'http://localhost:3000'}));
-const posts={ test:{name:"anil"}};
+const posts={};
 
 app.get('',(req,res)=>{
     
