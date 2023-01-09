@@ -1,9 +1,12 @@
 const express = require('express');
+const cors= require('cors');
 const {randomBytes} = require('crypto');
 
 const app=express();
 app.use(express.json());
 
+// cors middleware 
+app.use(cors({origin:'http://localhost:3000'}));
 const posts={ test:{name:"anil"}};
 
 app.get('',(req,res)=>{
