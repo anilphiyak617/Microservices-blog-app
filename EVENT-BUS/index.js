@@ -16,7 +16,7 @@ app.get('/events',(req,res)=>{
 // Event Emmition to event bus
 app.post('/events',(req,res)=>{
     const event=req.body;
-    
+    console.log("Event Received: ",event.type);
     // request to post service
     axios.post('http://localhost:4000/events',event);
     // request to comment service
