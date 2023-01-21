@@ -24,16 +24,17 @@ app.post('/posts/:id/comments',async (req,res)=>{
     const {content} =req.body;
 
     const postId=req.params.id;
+    console.log(req.params)
 
     const comments = commentsByPostId[postId] || [];
    
     // ! redundant copy of the comment 
-    comments.push({id: commentId, content});
+    comments.push({id:commentId, content});
 
     commentsByPostId[postId] = comments;
 
     try{
-
+        //  emmiting the event to the event bus
         await axios.post(`http://localhost:4005/events`,{
             type:'CommentCreated',
             data:{  id:commentId,postId,content }
