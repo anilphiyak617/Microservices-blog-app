@@ -6,16 +6,15 @@ function ListPost() {
 
     const [posts,setPosts]=useState({});
 
-    const ENDPOINT="http://localhost:4000/posts"
+    const ENDPOINT="http://localhost:4002/posts"
     const fetchPosts= async ()=>{
         const response=await axios.get(ENDPOINT);
         setPosts(response.data);
-        // console.log(response.data);
-    }
-
-    useEffect(()=>{ 
+      }
+      
+      useEffect(()=>{ 
         fetchPosts();
-    },[])
+      },[])
 
   return (
     <div>
