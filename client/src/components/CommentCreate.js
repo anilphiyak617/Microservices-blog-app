@@ -15,9 +15,10 @@ const CommentCreate = ({postId}) => {
         });
     };
 
-    const ENDPOINT =  `http://localhost:4001/posts/:${postId}/comments`;
+    const ENDPOINT =  `http://localhost:4001/posts/${postId}/comments`;
     const handleSubmit = async event => {
         event.preventDefault();
+        console.log(formState);
         const response=await axios.post(ENDPOINT,formState);
         setFormState({id:postId,content:''})
         await console.log(response.data);

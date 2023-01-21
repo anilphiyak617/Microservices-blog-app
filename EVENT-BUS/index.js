@@ -13,17 +13,37 @@ app.get('/events',(req,res)=>{
     res.send("Event Bus");
 });
 
-// Event Emmition to event bus
+// Receiving and event Emmition by event bus
 app.post('/events',(req,res)=>{
     const event=req.body;
-    console.log("Event Received: ",event.type);
-    // request to post service
-    axios.post('http://localhost:4000/events',event);
-    // request to comment service
-    axios.post('http://localhost:4001/events',event);
-    // request to query service
+    console.log("Event Received: ",event);
     
-    axios.post('http://localhost:4002/events',event);
+    // request to post service
+    try{
+
+        axios.post('http://localhost:4000/events',event);
+    }
+    catch(e){
+        console.log(e,"error in post service")
+    }
+
+    //request to comment service
+    try{
+
+        axios.post('http://localhost:4001/events',event);
+    }
+    catch(e){
+        console.log(e,"error in comment service")
+    }
+    
+    //request to query service
+    try {
+        
+        axios.post('http://localhost:4002/events',event);
+    }
+    catch(e){
+        console.log(e,"error in query service")
+    }
     
     res.send({status:'OK'});
 });
