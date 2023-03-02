@@ -4,6 +4,7 @@ import './index.css';
 import ListPost from './components/ListPost';
 
 function App() {
+  console.log("dsfsdf");;
   return (
     <div className="App">
       This is a blog App
