@@ -1,62 +1,75 @@
-const express= require('express')
-const cors = require('cors')    
-const {randomBytes} =require('crypto')
-const axios = require('axios')
-const app= express();
+const express = require("express");
+const cors = require("cors");
+const { randomBytes } = require("crypto");
+const axios = require("axios");
+const app = express();
 app.use(express.json());
 app.use(cors());
-const PORT=4001;
-const commentsByPostId ={};
+const PORT = 4001;
+// {id:string,postId:string, content:string }
+const commentsByPostId = {};
 
-app.get('/posts/:id/comments',(req,res)=>{
-
-    // console.log("get comments called");
-    const postId=req.params.id;
-    res.send(commentsByPostId[req.params.id] || [] )
-
+app.get("/posts/:id/comments", (req, res) => {
+  // console.log("get comments called");
+  const postId = req.params.id;
+  res.send(commentsByPostId[req.params.id] || []);
 });
 
+app.post("/posts/:id/comments", async (req, res) => {
+  const commentId = randomBytes(6).toString("hex");
+  const { content } = req.body;
 
-app.post('/posts/:id/comments',async (req,res)=>{
-   
+  const postId = req.params.id;
+  console.log(req.params);
 
-    const commentId= randomBytes(6).toString('hex');
-    const {content} =req.body;
+  const comments = commentsByPostId[postId] || [];
 
-    const postId=req.params.id;
-    console.log(req.params)
+  // ! redundant copy of the comment
+  comments.push({ id: commentId, content});
 
-    const comments = commentsByPostId[postId] || [];
-   
-    // ! redundant copy of the comment 
-    comments.push({id:commentId, content});
+  commentsByPostId[postId] = comments;
 
-    commentsByPostId[postId] = comments;
+  try {
+    //  emmiting the event to the event bus
+    await axios.post(`http://localhost:4005/events`, {
+      type: "CommentCreated",
+      data: { id: commentId, postId, content ,status:'pending'},
+    });
+  } catch (err) {
+    console.log(err);
+  }
 
-    try{
-        //  emmiting the event to the event bus
-        await axios.post(`http://localhost:4005/events`,{
-            type:'CommentCreated',
-            data:{  id:commentId,postId,content }
-        });
-    }
-
-    catch(err){
-        console.log(err);
-    }
-
-
-    res.status(201).send(comments);
+  res.status(201).send(commentsByPostId);
 });
 
+// receives the event from the event bus
+app.post("/events", async (req, res) => {
+  const { type } = req.body;
+  console.log("Event Received: ", type);
 
-// Event Bus receives the event
-app.post('/events',(req,res)=>{
-    const {type}=req.body;
-    console.log("Event Received: ",type);
-    res.send({});
-})
+    if(type==='CommentModerated'){
+        
+        const {postId,id,status,content}=req.body.data;
+        const comments=commentsByPostId[postId];
+        const comment=comments.find(comment=>comment.id===id);
+        comment.status=status;
 
-app.listen(PORT,()=>{
-    console.log(`listening at port ${PORT}`);
-})
+        try{
+            // emmiting the event to the event bus
+            await axios.post(`http://localhost:4005/events`, {
+                type: "CommentUpdated",
+                data: { id, postId, content ,status},
+            });   
+        }
+    catch {
+        console.log("error in the event bus");
+    }
+    
+}
+
+  res.send({});
+});
+
+app.listen(PORT, () => {
+  console.log(`listening at port ${PORT}`);
+});

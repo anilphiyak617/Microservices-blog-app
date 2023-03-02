@@ -24,10 +24,17 @@ app.post('/events',(req,res)=>{
         posts[id]={id,title,comments:[]};
     }
     if(type==='CommentCreated'){
-        console.log(data);
-        const {id,postId,content}=data;
+        const {id,postId,content,status}=data;
         const post=posts[postId];
-        post.comments?.push({id,content});
+        post.comments?.push({id,content,status});
+    }
+
+    if(type==='CommentUpdated'){
+        const {id,postId,content,status}=data;
+        const post=posts[postId];
+        const comment=post.comments?.find(comment=>comment.id===id);
+        comment.status=status;
+        comment.content=content;
     }
     console.log("Event Received: ",type);
     // response status for sucessfull creation of resource

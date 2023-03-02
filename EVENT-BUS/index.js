@@ -44,6 +44,16 @@ app.post('/events',(req,res)=>{
     catch(e){
         console.log(e,"error in query service")
     }
+
+    //request to moderation service
+    try {
+        
+        axios.post('http://localhost:4004/events',event);
+    }
+    catch(e){
+        console.log(e,"error in moderation service")
+    }
+    
     
     res.send({status:'OK'});
 });
