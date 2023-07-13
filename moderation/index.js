@@ -35,7 +35,7 @@ app.post('/events',async (req,res)=>{
         }
     }
 
-    res.send({});
+    res.status(201).send({});
 });
 
 

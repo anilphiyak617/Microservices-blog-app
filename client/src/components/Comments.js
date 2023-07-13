@@ -1,15 +1,16 @@
 import React from 'react'
 
 
-const Card = ({ content,id}) => (
-//   <ul className="m-2 post-card shadow-lg rounded-md p-4 ">
-    <div className="text-sm">{content}</div>
+const Card = ({ content, status }) => (
+  <div className="text-sm">
+    {status=== "approved" ? content : status}
+  </div>
 );
 
 
 export default function Comments({comments}) {
 
-  const renderedComments= Object.values(comments).map(({content,id})=><li><Card content={content} id={id} key={id}/></li>
+  const renderedComments= Object.values(comments).map(({content,id,status})=><li key={id}><Card content={content} status={status} /></li>
     )
   
   return (

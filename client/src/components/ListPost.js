@@ -2,11 +2,14 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import Posts from "./Posts";
 
+const PORT_QUERY_SERVICE = 4002
+const ENDPOINT=`http://localhost:${PORT_QUERY_SERVICE}/posts`
+
 function ListPost() {
 
     const [posts,setPosts]=useState({});
 
-    const ENDPOINT="http://localhost:4002/posts"
+
     const fetchPosts= async ()=>{
         const response=await axios.get(ENDPOINT);
         setPosts(response.data);

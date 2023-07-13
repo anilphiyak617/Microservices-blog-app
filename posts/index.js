@@ -2,6 +2,8 @@ const express = require('express');
 const cors= require('cors');
 const {randomBytes} = require('crypto');
 const { default: axios } = require('axios');
+require('dotenv').config({ path: '../.env' });
+
 
 const app=express();
 app.use(express.json());
@@ -10,16 +12,24 @@ app.use(express.json());
 app.use(cors());
 const posts={};
 
+const PORT = 4000;
+const PORT_EVENT_BUS_SERVICE = 4005
+
 app.get('',(req,res)=>{
     
     console.log("/home route is called");
-    res.json("dsfdsf");
+    const responseData = {
+        message: "This is the Home Route"
+    };
+    res.json(responseData);
 })
 
 app.get('/posts',(req,res)=>{
     res.send(posts);
 });
 
+// body
+//{ title:string,content:string }
 app.post('/posts',async (req,res)=>{
 
     const id = randomBytes(5).toString('hex');
@@ -30,7 +40,7 @@ app.post('/posts',async (req,res)=>{
     }
     try{
 
-        await axios.post(`http://localhost:4005/events`,{
+        await axios.post(`http://localhost:${PORT_EVENT_BUS_SERVICE}/events`,{
             type:'PostCreated',
             data:{  id,title }
         });
@@ -53,6 +63,8 @@ app.post('/events',(req,res)=>{
 })
 
 
-app.listen(4000,()=>{
-    console.log("listening on 4000");
+app.listen(PORT,()=>{
+    console.log(`listening on ${PORT}`);
 })
+
+

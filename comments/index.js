@@ -6,8 +6,11 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 const PORT = 4001;
-// {id:string,postId:string, content:string }
+
 const commentsByPostId = {};
+
+
+// Get comments of a post with given ID
 
 app.get("/posts/:id/comments", (req, res) => {
   // console.log("get comments called");
@@ -15,18 +18,22 @@ app.get("/posts/:id/comments", (req, res) => {
   res.send(commentsByPostId[req.params.id] || []);
 });
 
+// Create a comment to a post with post ID
+// Body schema for post creation
+// {id:string,postId:string, content:string }
 app.post("/posts/:id/comments", async (req, res) => {
+  
+  const postId = req.params.id;
+ 
   const commentId = randomBytes(6).toString("hex");
   const { content } = req.body;
-
-  const postId = req.params.id;
-  console.log(req.params);
+ 
+  // console.log(req.params);
 
   const comments = commentsByPostId[postId] || [];
 
   // ! redundant copy of the comment
   comments.push({ id: commentId, content});
-
   commentsByPostId[postId] = comments;
 
   try {
@@ -42,9 +49,21 @@ app.post("/posts/:id/comments", async (req, res) => {
   res.status(201).send(commentsByPostId);
 });
 
+
 // receives the event from the event bus
+// req.body={
+  // type:string,
+  // data:Object
+// }
+// data:{
+//    postId:string,
+//    id:string,
+//    status:number,
+//    content:string,
+// }
 app.post("/events", async (req, res) => {
   const { type } = req.body;
+  
   console.log("Event Received: ", type);
 
     if(type==='CommentModerated'){
