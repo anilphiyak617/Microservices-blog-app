@@ -36,6 +36,7 @@ app.post('/events',async (req,res)=>{
     // array of Promises representing requesting of the service
     const serviceRequests = services.map(async (service) => {
         try {
+ 
           await axios.post(service.url, event);
           console.log(`Event sent to ${service.name}`);
         } catch (error) {
