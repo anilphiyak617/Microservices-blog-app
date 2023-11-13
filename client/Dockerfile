@@ -7,6 +7,8 @@ WORKDIR ./app
 
 COPY ./ ./
 
-EXPOSE 3
+RUN npm install
+
+EXPOSE 3000
 CMD ["npm","start"]
 

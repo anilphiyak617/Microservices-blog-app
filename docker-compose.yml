@@ -1,0 +1,39 @@
+version: '3'
+
+services:
+  client-web:
+    build:
+      context: ./client
+    ports:
+      - "50001:3000"
+
+  # micro-services
+  service-event-bus:
+    build:
+      context: ./event-bus
+    ports:
+      - "50000:4005"
+
+  service-comments:
+    build:
+      context: ./comments
+    ports:
+      - "60001:3000"
+
+  service-moderation:
+    build:
+      context: ./moderation
+    ports:
+      - "60002:4004"
+
+  service-posts:
+    build:
+      context: ./posts
+    ports:
+      - "60003:4000"
+
+  service-query:
+    build:
+      context: ./query
+    ports:
+      - "60004:4002"
