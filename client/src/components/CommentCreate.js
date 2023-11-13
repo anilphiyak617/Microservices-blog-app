@@ -17,7 +17,8 @@ const CommentCreate = ({postId}) => {
         });
     };
 
-    const ENDPOINT =  `http://localhost:${PORT_COMMENTS_SERVICE}/posts/${postId}/comments`;
+    const ENDPOINT = `${process.env.REACT_APP_URL_COMMENTS_SERVICE}/posts/${postId}/comments`;
+    
     const handleSubmit = async event => {
         event.preventDefault();
         console.log(formState);

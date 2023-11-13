@@ -6,6 +6,8 @@ services:
       context: ./client
     ports:
       - "50001:3000"
+    networks:
+      - mynetwork
 
   # micro-services
   service-event-bus:
@@ -13,27 +15,40 @@ services:
       context: ./event-bus
     ports:
       - "50000:4005"
+    networks:
+      - mynetwork
 
   service-comments:
     build:
       context: ./comments
     ports:
       - "60001:3000"
+    networks:
+      - mynetwork
 
   service-moderation:
     build:
       context: ./moderation
     ports:
       - "60002:4004"
+    networks:
+      - mynetwork
 
   service-posts:
     build:
       context: ./posts
     ports:
       - "60003:4000"
+    networks:
+      - mynetwork
 
   service-query:
     build:
       context: ./query
     ports:
       - "60004:4002"
+    networks:
+      - mynetwork
+
+networks:
+  mynetwork:

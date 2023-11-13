@@ -16,13 +16,14 @@ const PostCreate = () => {
         });
     };
 
-    const ENDPOINT = 'http://localhost:4000/posts';
-    const handleSubmit = async event => {
-        event.preventDefault();
-        const response=await axios.post(ENDPOINT,formState);
-        setFormState({title:''})
-        await console.log(response);
-        // submit the form to create the post
+    const ENDPOINT = process.env.REACT_APP_URL_POSTS_SERVICE;
+    const handleSubmit = async (event) => {
+      console.log(ENDPOINT);
+      event.preventDefault();
+      const response = await axios.post(ENDPOINT, formState);
+      setFormState({ title: "" });
+      await console.log(response);
+      // submit the form to create the post
     };
 
     return (

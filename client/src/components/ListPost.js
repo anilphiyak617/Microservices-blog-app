@@ -3,7 +3,9 @@ import { useEffect, useState } from "react";
 import Posts from "./Posts";
 
 const PORT_QUERY_SERVICE = 4002
-const ENDPOINT=`http://localhost:${PORT_QUERY_SERVICE}/posts`
+const ENDPOINT = process.env
+  .REACT_APP_URL_QUERY_SERVICE + '/posts'
+  // || `http://localhost:${PORT_QUERY_SERVICE}/posts`;
 
 function ListPost() {
 
